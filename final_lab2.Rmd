@@ -1,0 +1,156 @@
+---
+title: "final lab 2"
+author: "Yuma Anderson and Hannah Lo"
+date: "9/19/2019"
+output: html_document
+---
+## Repository Information
+* https://github.com/yumaanderson/ds202_lab2
+* ds202_lab2
+* @ yumaanderson
+
+## Individual 1 (Yuma Anderson)
+```{r}
+choco <- read.csv("https://raw.githubusercontent.com/lbchu/ds202_labs/master/choco.csv")
+head(choco)
+```
+
+1. The chocolate ratings have a Normal distribution. There are two outliers with a score of 5.
+```{r}
+hist(choco$Rating, xlab = "Rating", main = "Distribution of Chocolate Ratings")
+```
+
+```{r}
+which.max(choco$Rating)
+#Finding maximum score
+choco[87, 'Rating']
+#Location of maximum score
+choco[choco$Rating == '5',]
+#Searching for multiples of maximum score
+```
+
+
+2. No, the ratings are not significantly affected by the cacao percentage. They are very slightly negatively correlated, with an inconclusive barplot.
+
+```{r}
+barplot(choco$Cocoa.Pct, choco$Rating)
+
+cor(choco$Cocoa.Pct, choco$Rating)
+```
+
+
+3. Company.Location is a factor, which is a data structure similar to a dataframe, and can be ordered or unordered but represent categorical data. Characters represent string values in R, while factors are stored as integers although they look like characters to us. 
+
+```{r}
+typeof(choco$Company.Location)
+```
+
+## Individual 2 (Hannah Lo)
+
+1. The ratings are distributed in a Normal Distribution. There are two outliers that have a value of 5.
+
+```{r}
+choco <- read.csv("https://raw.githubusercontent.com/lbchu/ds202_labs/master/choco.csv")  
+hist(choco$Rating, xlab="Rating",main="Histogram of Rating")
+```
+
+```{r}
+# what is max
+which.max(choco$Rating)
+# locations of max
+choco[choco$Rating == '5',]
+```
+
+2. The ratings do not have a significant relationship with caco, showed by a non-conclusive barplot and correlation score.
+
+```{r}
+# correlation score
+cor(choco$Cocoa.Pct,choco$Rating)
+
+barplot(choco$Cocoa.Pct,choco$Rating)
+```
+
+3. The class is factor. This class is different than characters because they only look like categorical data to us, but it is seen as an integer to the machine.
+
+```{r}
+typeof(choco$Company.Location)
+```
+
+## Team
+1. 
+```{r, eval=FALSE}
+recent_rating = choco[choco$Review.Date>2011,] #creates a grouping of ratings from 2011 to most recently
+
+unique(recent_rating$Company.Location) # NOTICE: how many countries are listed but how many levels are there? 
+#There are 54 countries but 61 levels
+# displays every unique country name in the data from 2011 to most recently
+
+recent_rating$Company.Location = droplevels(recent_rating$Company.Location) # drops the extra levels
+
+head(recent_rating) # displays the first 6 columns of the cleaned chocolate data
+
+cross_table = table(recent_rating$Review.Date,recent_rating$Company.Location) # creates a cross table of the cleaned chocolate data with the number of reviews in a country by the review year from 2011 to 2017
+cross_table # displays the cross table
+
+which(cross_table[1,]!=0 & cross_table[2,]!=0 & cross_table[3,]!=0 & cross_table[4,]!=0 & cross_table[5,]!=0) # finds the countries that have at least one review per year from 2011 to 2017. Goes through each year and searches for countries who's values do not equal zero (cross_table[column number,]!=0)
+
+france_recent = subset(recent_rating,Company.Location =='France') # creates a subset of reviews in France from 2011 to most recently
+uk_recent = subset(recent_rating,Company.Location =='U.K.') # creates a subset of reviews in the UK from 2011 to most recently
+germany_recent = subset(recent_rating,Company.Location=='Germany') # creates a subset of reviews in Germany from 2011 to most recently
+
+par(mfrow=c(2,2)) # combines the following plots into a 2 by 2 matrix
+
+color1 = ifelse(france_recent$Rating >median(france_recent$Rating), 'blue', 'green') # Logic test that checks elementwise if the particular rating value from france_recent is greater than its median. If yes, then blue is returned. If no, green is returned. 
+plot(france_recent$Cocoa.Pct ~ france_recent$Review.Date,ylim=c(50,90),col=color1,pch=18,cex=1.5,xlab="Review Date", ylab= "Cocoa Percentage", main= "France") # returns a scatter plot of what cocoa percentage a rating was left for on what year for france recently, ylim is moved the axis to only show the 50-90% cocoa, col chooses the color scheme, pch is the  specification for the shape of the spot, cex scales the text and symbols, xlab and ylab label the axis, main names the graphic
+legend('bottomright',legend=c('High Rating', 'Low Rating'),col=c('blue','green'),pch=18) # sets a legend to a specific bottom right location that shows if a rating was higher than the median it is blue and if a rating was lower than the median it was green
+
+color2 = ifelse(uk_recent$Rating >median(uk_recent$Rating), 'purple', 'red') # Logic test that checks elementwise if the particular rating value from uk_recent is greater than its median. If yes, then purple is returned. If no, red is returned. 
+plot(uk_recent$Cocoa.Pct ~ uk_recent$Review.Date,ylim=c(50,90),col=color2,pch=18,cex=1.5, xlab="Review Date", ylab= "Cocoa Percentage", main= "UK") # returns a scatter plot of what cocoa percentage a rating was left for on what year for the uk recently, ylim is moved the axis to only show the 50-90% cocoa, col chooses the color scheme, pch is the  specification for the shape of the spot, cex scales the text and symbols, xlab and ylab label the axis, main names the graphic
+legend('bottomright',legend=c('High Rating', 'Low Rating'),col=c('purple','red'),pch=18) # sets a legend to a specific bottom right location that shows if a rating was higher than the median it is purple and if a rating was lower than the median it was red
+
+color3 = ifelse(germany_recent$Rating > median(germany_recent$Rating), 'orange', 'yellow') # Logic test that checks elementwise if the particular rating value from germany_recent is greater than its median. If yes, then orange is returned. If no, yellow is returned. 
+plot(germany_recent$Cocoa.Pct ~ germany_recent$Review.Date,ylim=c(50,90),col=color3,pch=18,cex=1.5,xlab="Review Date", ylab= "Cocoa Percentage", main= "Germany") # returns a scatter plot of what cocoa percentage a rating was left for on what year for germany recently, ylim is moved the axis to only show the 50-90% cocoa, col chooses the color scheme, pch is the  specification for the shape of the spot, cex scales the text and symbols, xlab and ylab label the axis, main names the graphic
+legend('bottomright',legend=c('High Rating', 'Low Rating'),col=c('orange','yellow'),pch=18) # sets a legend to a specific bottom right location that shows if a rating was higher than the median it is orange and if a rating was lower than the median it was yellow
+```
+
+2. The plot can be improved by changing the y variable to the rating, and creating a legend where the data points are color coded by their cocoa percentage. 
+
+3. The number of ratings vary, with 2015 having the most reviews and 2017 having the least. The mean is around 201 reviews.
+```{r}
+library(plyr)
+choco <- read.csv("https://raw.githubusercontent.com/lbchu/ds202_labs/master/choco.csv")
+head(choco)
+number_reviews = count(choco, "Review.Date") # summing the number of observations per year to double check the histogram
+recent_rating = choco[choco$Review.Date>2011,]
+x = hist(recent_rating$Review.Date, main="Number of Reviews from 2012 to 2017")
+```
+
+4. The top three locations with the most ratings from 2012-2017 was The United States, Canada, and France. Surprisingly the ratings are very similar with all three sharing the same median of 3.25.
+```{r}
+# finding top three
+sort(table(recent_rating$Company.Location))
+# subsetting top three rating
+us = subset(recent_rating,Company.Location =='U.S.A.')
+can = subset(recent_rating,Company.Location=='Canada')
+fra = subset(recent_rating,Company.Location=='France')
+# finding median for top three's ratings
+us_med = median(us$Rating)
+can_med = median(can$Rating)
+fra_med = median(fra$Rating)
+# display the medians
+us_med
+can_med
+fra_med
+```
+5. How do the mean and median ratings compare of the top three most rated countries?
+6. Though the medians of the top three are identical, their means vary. France is the closest to the median. The United States must have a low outlier that brought its mean down. And Canada may have a high outlier, pullings its mean up.
+```{r}
+# finding median for top three's ratings
+us_mean = mean(us$Rating)
+can_mean = mean(can$Rating)
+fra_mean = mean(fra$Rating)
+# display the means
+us_mean
+can_mean
+fra_mean
+```
