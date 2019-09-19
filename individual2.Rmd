@@ -1,0 +1,35 @@
+---
+title: ' Lab 2: Question set (individual) '
+subtitle: "Due: Thursday 09/19/2019 by 10 pm"
+author: "Hannah Lo"
+date: "09/12/2019"
+output: html_document
+---
+1. The ratings are distributed in a Normal Distribution. There are two outliers that have a value of 5.
+
+```{r}
+choco <- read.csv("https://raw.githubusercontent.com/lbchu/ds202_labs/master/choco.csv")  
+hist(choco$Rating, xlab="Rating",main="Histogram of Rating")
+```
+
+```{r}
+# what is max
+which.max(choco$Rating)
+# locations of max
+choco[choco$Rating == '5',]
+```
+
+2. The ratings do not have a significant relationship with caco, showed by a non-conclusive barplot and correlation score.
+
+```{r}
+# correlation score
+cor(choco$Cocoa.Pct,choco$Rating)
+
+barplot(choco$Cocoa.Pct,choco$Rating)
+```
+
+3. The class is factor. This class is different than characters because they only look like categorical data to us, but it is seen as an integer to the machine.
+
+```{r}
+typeof(choco$Company.Location)
+```
