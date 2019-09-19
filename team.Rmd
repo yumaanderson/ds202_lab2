@@ -1,16 +1,15 @@
 ---
-title: "team"
+title: "Team"
+author: "Yuma Anderson and Hannah Lo"
 output: html_document
 ---
-Yuma Anderson
-Hannah Lo
 
-https://github.com/yumaanderson/ds202_lab2
-ds202_lab2
-@ yumaanderson
+* https://github.com/yumaanderson/ds202_lab2
+* ds202_lab2
+* @ yumaanderson
 
 
-## Question Set (team)
+## Question Set
 1. 
 ```{r, eval=FALSE}
 recent_rating = choco[choco$Review.Date>2011,] #creates a grouping of ratings from 2011 to most recently
@@ -32,18 +31,19 @@ france_recent = subset(recent_rating,Company.Location =='France') # creates a su
 uk_recent = subset(recent_rating,Company.Location =='U.K.') # creates a subset of reviews in the UK from 2011 to most recently
 germany_recent = subset(recent_rating,Company.Location=='Germany') # creates a subset of reviews in Germany from 2011 to most recently
 
-par(mfrow=c(2,2))
-color1 = ifelse(france_recent$Rating >median(france_recent$Rating), 'blue', 'green')
-plot(france_recent$Cocoa.Pct ~ france_recent$Review.Date,ylim=c(50,90),col=color1,pch=18,cex=1.5,xlab="Review Date", ylab= "Cocoa Percentage", main= "France") 
-legend('bottomright',legend=c('High Rating', 'Low Rating'),col=c('blue','green'),pch=18)
+par(mfrow=c(2,2)) # combines the following plots into a 2 by 2 matrix
 
-color2 = ifelse(uk_recent$Rating >median(uk_recent$Rating), 'purple', 'red')
-plot(uk_recent$Cocoa.Pct ~ uk_recent$Review.Date,ylim=c(50,90),col=color2,pch=18,cex=1.5, xlab="Review Date", ylab= "Cocoa Percentage", main= "UK")
-legend('bottomright',legend=c('High Rating', 'Low Rating'),col=c('purple','red'),pch=18)
+color1 = ifelse(france_recent$Rating >median(france_recent$Rating), 'blue', 'green') # Logic test that checks elementwise if the particular rating value from france_recent is greater than its median. If yes, then blue is returned. If no, green is returned. 
+plot(france_recent$Cocoa.Pct ~ france_recent$Review.Date,ylim=c(50,90),col=color1,pch=18,cex=1.5,xlab="Review Date", ylab= "Cocoa Percentage", main= "France") # returns a scatter plot of what cocoa percentage a rating was left for on what year for france recently, ylim is moved the axis to only show the 50-90% cocoa, col chooses the color scheme, pch is the  specification for the shape of the spot, cex scales the text and symbols, xlab and ylab label the axis, main names the graphic
+legend('bottomright',legend=c('High Rating', 'Low Rating'),col=c('blue','green'),pch=18) # sets a legend to a specific bottom right location that shows if a rating was higher than the median it is blue and if a rating was lower than the median it was green
 
-color3 = ifelse(germany_recent$Rating > median(germany_recent$Rating), 'orange', 'yellow')
-plot(germany_recent$Cocoa.Pct ~ germany_recent$Review.Date,ylim=c(50,90),col=color3,pch=18,cex=1.5,xlab="Review Date", ylab= "Cocoa Percentage", main= "Germany") 
-legend('bottomright',legend=c('High Rating', 'Low Rating'),col=c('orange','yellow'),pch=18)
+color2 = ifelse(uk_recent$Rating >median(uk_recent$Rating), 'purple', 'red') # Logic test that checks elementwise if the particular rating value from uk_recent is greater than its median. If yes, then purple is returned. If no, red is returned. 
+plot(uk_recent$Cocoa.Pct ~ uk_recent$Review.Date,ylim=c(50,90),col=color2,pch=18,cex=1.5, xlab="Review Date", ylab= "Cocoa Percentage", main= "UK") # returns a scatter plot of what cocoa percentage a rating was left for on what year for the uk recently, ylim is moved the axis to only show the 50-90% cocoa, col chooses the color scheme, pch is the  specification for the shape of the spot, cex scales the text and symbols, xlab and ylab label the axis, main names the graphic
+legend('bottomright',legend=c('High Rating', 'Low Rating'),col=c('purple','red'),pch=18) # sets a legend to a specific bottom right location that shows if a rating was higher than the median it is purple and if a rating was lower than the median it was red
+
+color3 = ifelse(germany_recent$Rating > median(germany_recent$Rating), 'orange', 'yellow') # Logic test that checks elementwise if the particular rating value from germany_recent is greater than its median. If yes, then orange is returned. If no, yellow is returned. 
+plot(germany_recent$Cocoa.Pct ~ germany_recent$Review.Date,ylim=c(50,90),col=color3,pch=18,cex=1.5,xlab="Review Date", ylab= "Cocoa Percentage", main= "Germany") # returns a scatter plot of what cocoa percentage a rating was left for on what year for germany recently, ylim is moved the axis to only show the 50-90% cocoa, col chooses the color scheme, pch is the  specification for the shape of the spot, cex scales the text and symbols, xlab and ylab label the axis, main names the graphic
+legend('bottomright',legend=c('High Rating', 'Low Rating'),col=c('orange','yellow'),pch=18) # sets a legend to a specific bottom right location that shows if a rating was higher than the median it is orange and if a rating was lower than the median it was yellow
 ```
 
 2. The plot can be improved by changing the y variable to the rating, and creating a legend where the data points are color coded by their cocoa percentage. 
@@ -56,4 +56,34 @@ head(choco)
 number_reviews = count(choco, "Review.Date") # summing the number of observations per year to double check the histogram
 recent_rating = choco[choco$Review.Date>2011,]
 x = hist(recent_rating$Review.Date, main="Number of Reviews from 2012 to 2017")
+```
+
+4. The top three locations with the most ratings from 2012-2017 was The United States, Canada, and France. Surprisingly the ratings are very similar with all three sharing the same median of 3.25.
+```{r}
+# finding top three
+sort(table(recent_rating$Company.Location))
+# subsetting top three rating
+us = subset(recent_rating,Company.Location =='U.S.A.')
+can = subset(recent_rating,Company.Location=='Canada')
+fra = subset(recent_rating,Company.Location=='France')
+# finding median for top three's ratings
+us_med = median(us$Rating)
+can_med = median(can$Rating)
+fra_med = median(fra$Rating)
+# display the medians
+us_med
+can_med
+fra_med
+```
+5. How do the mean and median ratings compare of the top three most rated countries?
+6. Though the medians of the top three are identical, their means vary. France is the closest to the median. The United States must have a low outlier that brought its mean down. And Canada may have a high outlier, pullings its mean up.
+```{r}
+# finding median for top three's ratings
+us_mean = mean(us$Rating)
+can_mean = mean(can$Rating)
+fra_mean = mean(fra$Rating)
+# display the means
+us_mean
+can_mean
+fra_mean
 ```
