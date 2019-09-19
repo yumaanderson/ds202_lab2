@@ -1,0 +1,43 @@
+---
+title: "individual1"
+output: html_document
+---
+```{r}
+choco <- read.csv("https://raw.githubusercontent.com/lbchu/ds202_labs/master/choco.csv")
+head(choco)
+```
+
+## 1. Question Set
+
+1. The chocolate ratings have a Normal distribution. There are two outliers with a score of 5.
+```{r}
+hist(choco$Rating, xlab = "Rating", main = "Distribution of Chocolate Ratings")
+```
+
+```{r}
+which.max(choco$Rating)
+#Finding maximum score
+choco[87, 'Rating']
+#Location of maximum score
+choco[choco$Rating == '5',]
+#Searching for multiples of maximum score
+```
+
+
+2. No, the ratings are not significantly affected by the cacao percentage. They are very slightly negatively correlated, with an inconclusive barplot.
+
+```{r}
+barplot(choco$Cocoa.Pct, choco$Rating)
+
+cor(choco$Cocoa.Pct, choco$Rating)
+```
+
+
+3. Company.Location is a factor, which is a data structure similar to a dataframe, and can be ordered or unordered but represent categorical data. Characters represent string values in R, while factors are stored as integers although they look like characters to us. 
+
+```{r}
+typeof(choco$Company.Location)
+```
+
+
+

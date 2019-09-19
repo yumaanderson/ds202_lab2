@@ -1,6 +1,59 @@
 ---
-title: "Lab 2"
+title: "team"
 output: html_document
 ---
+Yuma Anderson
+Hannah Lo
+
+https://github.com/yumaanderson/ds202_lab2
+ds202_lab2
+@ yumaanderson
+
 
 ## Question Set (team)
+1. 
+```{r, eval=FALSE}
+recent_rating = choco[choco$Review.Date>2011,] #creates a grouping of ratings from 2011 to most recently
+
+unique(recent_rating$Company.Location) # NOTICE: how many countries are listed but how many levels are there? 
+#There are 54 countries but 61 levels
+# displays every unique country name in the data from 2011 to most recently
+
+recent_rating$Company.Location = droplevels(recent_rating$Company.Location) # drops the extra levels
+
+head(recent_rating) # displays the first 6 columns of the cleaned chocolate data
+
+cross_table = table(recent_rating$Review.Date,recent_rating$Company.Location) # creates a cross table of the cleaned chocolate data with the number of reviews in a country by the review year from 2011 to 2017
+cross_table # displays the cross table
+
+which(cross_table[1,]!=0 & cross_table[2,]!=0 & cross_table[3,]!=0 & cross_table[4,]!=0 & cross_table[5,]!=0) # finds the countries that have at least one review per year from 2011 to 2017. Goes through each year and searches for countries who's values do not equal zero (cross_table[column number,]!=0)
+
+france_recent = subset(recent_rating,Company.Location =='France') # creates a subset of reviews in France from 2011 to most recently
+uk_recent = subset(recent_rating,Company.Location =='U.K.') # creates a subset of reviews in the UK from 2011 to most recently
+germany_recent = subset(recent_rating,Company.Location=='Germany') # creates a subset of reviews in Germany from 2011 to most recently
+
+par(mfrow=c(2,2))
+color1 = ifelse(france_recent$Rating >median(france_recent$Rating), 'blue', 'green')
+plot(france_recent$Cocoa.Pct ~ france_recent$Review.Date,ylim=c(50,90),col=color1,pch=18,cex=1.5,xlab="Review Date", ylab= "Cocoa Percentage", main= "France") 
+legend('bottomright',legend=c('High Rating', 'Low Rating'),col=c('blue','green'),pch=18)
+
+color2 = ifelse(uk_recent$Rating >median(uk_recent$Rating), 'purple', 'red')
+plot(uk_recent$Cocoa.Pct ~ uk_recent$Review.Date,ylim=c(50,90),col=color2,pch=18,cex=1.5, xlab="Review Date", ylab= "Cocoa Percentage", main= "UK")
+legend('bottomright',legend=c('High Rating', 'Low Rating'),col=c('purple','red'),pch=18)
+
+color3 = ifelse(germany_recent$Rating > median(germany_recent$Rating), 'orange', 'yellow')
+plot(germany_recent$Cocoa.Pct ~ germany_recent$Review.Date,ylim=c(50,90),col=color3,pch=18,cex=1.5,xlab="Review Date", ylab= "Cocoa Percentage", main= "Germany") 
+legend('bottomright',legend=c('High Rating', 'Low Rating'),col=c('orange','yellow'),pch=18)
+```
+
+2. The plot can be improved by changing the y variable to the rating, and creating a legend where the data points are color coded by their cocoa percentage. 
+
+3. The number of ratings vary, with 2015 having the most reviews and 2017 having the least. The mean is around 201 reviews.
+```{r}
+library(plyr)
+choco <- read.csv("https://raw.githubusercontent.com/lbchu/ds202_labs/master/choco.csv")
+head(choco)
+number_reviews = count(choco, "Review.Date") # summing the number of observations per year to double check the histogram
+recent_rating = choco[choco$Review.Date>2011,]
+x = hist(recent_rating$Review.Date, main="Number of Reviews from 2012 to 2017")
+```
