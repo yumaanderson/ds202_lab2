@@ -1,5 +1,5 @@
 ---
-title: "final lab 2"
+title: "Final Lab 2"
 author: "Yuma Anderson and Hannah Lo"
 date: "9/19/2019"
 output: html_document
